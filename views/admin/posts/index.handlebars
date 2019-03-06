@@ -1,0 +1,36 @@
+<h2>Posts List: </h2>
+<hr>
+<div class="text-right">
+    <a href="/admin/posts/create">
+        <button class="btn btn-outline-success">New Post</button>
+    </a>
+</div>
+
+{{#each posts}}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4>{{title}}</h4>
+            <p>{{description}}</p>
+            <p><small><b>Slug: </b>{{slug}}</small></p>
+            <p><small><b>Category: </b>{{category.name}}</small></p>
+            <br>
+            <p><small><b>Created at: </b>{{created_at}}</small></p>
+            <p><small><b>Last Update at: </b>{{update_at}}</small></p>
+            <div class="row mt-4 justify-content-center align-items-center">
+                <div class="col-sm-2">
+                    <a href="/admin/posts/edit/{{id}}">
+                        <button type="button" class="form-control btn btn-outline-primary">Edit</button>
+                    </a> 
+                </div>
+                <div class="col-sm-2">
+                    <form action="/admin/posts/delete" method="POST">
+                        <input type="hidden" name="id" value="{{_id}}">
+                        <button type="submit" class="form-control btn btn-outline-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{{else}}
+    <h4 class="mt-3">No posts registered</h4>
+{{/each}}

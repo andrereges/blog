@@ -1,0 +1,35 @@
+<h3>
+    {{#if category}}
+        Update Category - {{category.name}}
+    {{else}}
+        Create Category
+    {{/if}}
+</h3>
+<div class="card">
+    <div class="card-body">
+        <form action="{{#if category}}/admin/categories/update{{else}}/admin/categories/add{{/if}}" method="category">
+            <input type="hidden" id="id" name="id" value="{{#if category}}{{category._id}}{{else}}{{/if}}">
+            <label for="title">*Title:</label>
+                <input type="text" id="title" name="title" 
+                    placeholder="Category's title" 
+                    class="form-control"
+                    value="{{#if category}}{{category.title}}{{else}}{{/if}}"
+                    autofocus required>
+
+            <label for="slug">*Slug:</label>
+                <input type="text" id="slug" name="slug" 
+                    placeholder="Category's slug" 
+                    class="form-control"
+                    value="{{#if category}}{{category.slug}}{{else}}{{/if}}"
+                required>
+            <br>
+            <div class="text-left">
+                <small style="color: red">* Required Fields</small>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-outline-success">{{#if category}}Update{{else}}Create{{/if}}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{>_goBackButton}}
