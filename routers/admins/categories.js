@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
@@ -28,7 +30,7 @@ router.post('/add', (req, res) => {
         slug: req.body.slug
     }
 
-    let errors = validate(newCategory);
+    const errors = validate(newCategory);
 
     if(errors.length > 0) {
         res.render('admins/categories/create_update', {errors: errors})
