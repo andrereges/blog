@@ -1,0 +1,13 @@
+<h4>Categories List</h4>
+<hr>
+<ul>
+    {{#each categories}}
+        <a href="/categories/{{slug}}">
+            <li>{{name}}</li>
+        </a>
+    {{else}}
+        No categories registered
+    {{/each}}
+</ul>
+
+{{>_goBackButton}}

@@ -4,13 +4,18 @@
     //const handlebars_dateformat = require('handlebars-dateformat')
     const bodyParser = require('body-parser')
     const app = express()
-    const admin = require('./routers/admin/home')
-    const admin_categories = require('./routers/admin/categories')
-    const admin_posts = require('./routers/admin/posts')
+    const admins = require('./routers/admins/home')
+    const admins_categories = require('./routers/admins/categories')
+    const admins_posts = require('./routers/admins/posts')
     const path = require('path')
     const mongoose = require('mongoose')
     const session = require('express-session')
     const flash = require('connect-flash')
+
+    require('./models/Post')
+    require('./models/Category')
+    const Post = mongoose.model('posts')
+    const Category = mongoose.model('categories')
 
 // Configurations
     // Session
@@ -43,10 +48,81 @@
         app.use(express.static(path.join(__dirname, 'public')))
 
 // Routers
-    app.get('/', (req, res) => res.render('index'))
-    app.use('/admin', admin)
-    app.use('/admin/categories', admin_categories)
-    app.use('/admin/posts', admin_posts)
+    app.get('/', (req, res) => {
+        Post.find().populate('category').sort({created_at: 'desc'})
+            .then(
+                (posts) => res.render('index', {posts: posts})
+            ).catch(
+                (err) => {
+                    req.flash('error_msg', 'There is a internal error')
+                    res.redirect('/404')
+                    console.log(err)
+                }
+            )
+    })
+
+    app.get('/posts/:slug', (req, res) => {
+        Post.findOne({slug: req.params.slug})
+            .then((post) => {                
+                if(post) {                    
+                    res.render('posts/index', {post: post})
+                } else {
+                    req.flash('error_msg', 'This post not exist!')
+                    res.redirect('/')
+                }
+            }).catch(
+                (err) => {
+                    req.flash('error_msg', 'There is a internal error')
+                    res.redirect('/')
+                    console.log(err)
+                }
+            )
+    })
+
+    app.get('/categories', (req, res) => {
+        Category.find()
+            .then(
+                (categories) => res.render('categories/index', {categories: categories})
+            ).catch(
+                (err) => {
+                    req.flash('error_msg', 'There is a internal error to list categories')
+                    res.redirect('/')
+                    console.log(err)
+                }
+            )
+    })
+
+    app.get('/categories/:slug', (req, res) => {
+        Category.findOne({slug: req.params.slug})
+            .then((category) => {
+                if(category) {
+                    Post.find({category: category._id})
+                    .then(
+                        (posts) => res.render('categories/posts', {posts: posts, category: category})
+                    )
+                    .catch(
+                        (err) => {
+                            req.flash('error_msg', 'There is a error to list posts!')
+                            res.redirect('/')
+                        }
+                    )
+                } else {
+                    req.flash('error_msg', 'This category not exist!')
+                    res.redirect('/')
+                }                 
+            }).catch(
+                (err) => {
+                    req.flash('error_msg', 'There is a internal error to load category\'s page.')
+                    res.redirect('/')
+                    console.log(err)
+                }
+            )
+    })
+
+    app.get('/', (req, res) => res.render('error'))
+    app.use('/admins', admins)
+    app.use('/admins/categories', admins_categories)
+    app.use('/admins/posts', admins_posts)
 
 // Others
     const PORT = 8081

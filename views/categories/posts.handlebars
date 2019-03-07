@@ -1,0 +1,17 @@
+<h1>{{category.name}}</h1>
+<hr>
+{{#each posts}}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3>{{title}}</h3>
+            <p>{{description}}</p>
+            <a href="/posts/{{slug}}"><button class="btn btn-success">Read more</button></a>
+            <hr>
+            <small>Publication date: {{created_at}}</small>
+        </div>
+    </div>
+{{else}}
+    <h5>No post</h5>
+{{/each}}
+
+{{>_goBackButton}}

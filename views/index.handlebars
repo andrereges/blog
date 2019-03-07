@@ -1,1 +1,26 @@
-<h1>Home Page</h1>
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to The Mentors' Blog</h1>
+    <p class="lead">This blog is intended for people who want to improve the perception of human mind.</p>
+    <hr class="my-4">
+    <p>Here you can learn more about the human mind.</p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    </p>
+</div>
+<hr>
+<h2>Recent Posts</h2>
+
+{{#each posts}}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3>{{title}}</h3>
+            <p>{{description}}</p>
+            <a href="/posts/{{slug}}"><button class="btn btn-success">Read more</button></a>
+            <hr>
+            <small>Category: {{category.name}}</small><br>
+            <small>Publication date: {{created_at}}</small>
+        </div>
+    </div>
+{{else}}
+    <h5>No post</h5>
+{{/each}}

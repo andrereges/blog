@@ -8,42 +8,42 @@ router.get('/', (req, res) => {
     Category.find()
         .sort({created_at: 'desc'})
         .then(
-            (categories) => res.render('admin/categories/index', { categories: categories})
+            (categories) => res.render('admins/categories/index', { categories: categories})
         )
         .catch(
             (err) => {
                 req.flash('error_msg', 'Error! There is a problem to list categories.')
-                res.render('admin/categories/index')
+                res.render('admins/categories/index')
                 console.log(err)
             }
         )
 })
 
-router.get('/create', (req, res) => res.render('admin/categories/create_update'))
+router.get('/create', (req, res) => res.render('admins/categories/create_update'))
 
 router.post('/add', (req, res) => {
     
     const newCategory = {
-        title: req.body.title,
+        name: req.body.name,
         slug: req.body.slug
     }
 
-    let errors = validate(addCategory);
+    let errors = validate(newCategory);
 
     if(errors.length > 0) {
-        res.render('admin/categories/create_update', {errors: errors})
+        res.render('admins/categories/create_update', {errors: errors})
     } else {
         new Category(newCategory)
             .save()
             .then(
                 (category) => {
                     req.flash('success_msg', `Success! Category "${category.name}" created!`)
-                    res.redirect('/admin/categories')
+                    res.redirect('/admins/categories')
             })
             .catch(
                 (err) => {
                     req.flash('error_msg', `Error! Category "${category.name}" wasn't created!`)
-                    res.redirect('/admin/categories/create')
+                    res.redirect('/admins/categories/create')
                     console.log(err)
                 }
             )
@@ -53,12 +53,12 @@ router.post('/add', (req, res) => {
 router.get('/edit/:id', (req, res) => {
     Category.findOne({_id: req.params.id})
         .then(
-            (category) => res.render('admin/categories/create_update', {category: category})
+            (category) => res.render('admins/categories/create_update', {category: category})
         )
         .catch(
             (err) => {
                 req.flash('error_msg', 'This category doesn\'t exist.')
-                res.redirect('/admin/categories')
+                res.redirect('/admins/categories')
                 console.log(err)
             }
         )
@@ -76,20 +76,20 @@ router.post('/update', (req, res) => {
     let errors = validate(updateCategory);
 
     if(errors.length > 0) {
-        res.render('admin/categories/create_update', {errors: errors})
+        res.render('admins/categories/create_update', {errors: errors})
     } else {
 
         Category.findOneAndUpdate(updateCategory._id, {$set:updateCategory})
             .then(
                 () => {
                     req.flash('success_msg', `Success! Category "${updateCategory.name}" updated!`)
-                    res.redirect('/admin/categories')   
+                    res.redirect('/admins/categories')   
                 }
             )
             .catch(
                 (err) => {
                     req.flash('error_msg', `Error! Category "${category.name}" wasn't created!`)
-                    res.redirect('/admin/categories/update')
+                    res.redirect('/admins/categories/update')
                     console.log(err)
                 }
         )
@@ -102,13 +102,13 @@ router.post("/delete", (req, res) => {
         .then(
             (category) => {
                 req.flash('success_msg', `Success! Category "${category.name}" deleted!`)
-                res.redirect('/admin/categories')
+                res.redirect('/admins/categories')
             }
         )
         .catch(
             (err) => {
                 req.flash('error_msg', `Error! Category "${category.name}" wasn't deleted!`)
-                res.redirect('/admin/categories')
+                res.redirect('/admins/categories')
                 console.log(err)
             }
         )
@@ -119,10 +119,6 @@ function validate(object) {
 
     if(!object.name || typeof object.name == undefined || object.name == null) {
         errors.push({text: 'Invalid name'})
-    }
-
-    if(object.name.length < 2 ) {
-        errors.push({text: 'Category name is too small'})
     }
 
     if(!object.slug || typeof object.slug == undefined || object.slug == null) {

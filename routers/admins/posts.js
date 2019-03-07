@@ -9,12 +9,12 @@ const Category = mongoose.model('categories')
 router.get('/', (req, res) => {
     Post.find().populate('category').sort({created_at: 'desc'})
         .then(
-            (posts) => res.render('admin/posts/index', {posts: posts})
+            (posts) => res.render('admins/posts/index', {posts: posts})
         )
         .catch(
             (err) => {
                 req.flash('error_msg', 'Error! There is a problem to list posts.')
-                res.render('admin/posts/index')
+                res.render('admins/posts/index')
                 console.log(err)
             }
         )
@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 router.get('/create', (req, res) => {
     Category.find()
         .then(
-            (categories) => res.render('admin/posts/create_update', {categories: categories})
+            (categories) => res.render('admins/posts/create_update', {categories: categories})
         )
         .catch(
             (err) => {
@@ -48,7 +48,7 @@ router.post('/add', (req, res) => {
     if(errors.length > 0) {
         Category.find()
         .then(
-            (categories) => res.render('admin/posts/create_update', {errors: errors, categories: categories})
+            (categories) => res.render('admins/posts/create_update', {errors: errors, categories: categories})
         )
         .catch(
             (err) => {
@@ -62,12 +62,12 @@ router.post('/add', (req, res) => {
             .then(
                 () => {
                     req.flash('success_msg', `Success! Post "${newPost.title}" created!`)
-                    res.redirect('/admin/posts')
+                    res.redirect('/admins/posts')
             })
             .catch(
                 (err) => {
                     req.flash('error_msg', `Error! Post "${newPost.title}" wasn't created!`)
-                    res.redirect('/admin/posts/create')
+                    res.redirect('/admins/posts/create')
                     console.log(err)
                 }
             )
@@ -81,12 +81,12 @@ router.get('/edit/:id', (req, res) => {
             (post) => {
                 Category.find()
                     .then(
-                        (categories) => res.render('admin/posts/create_update', {post: post, categories: categories})
+                        (categories) => res.render('admins/posts/create_update', {post: post, categories: categories})
                     )
                     .catch(
                         (err) => {
                             req.flash('error_msg', 'This is a error to list categories.')
-                            res.redirect('/admin/posts')
+                            res.redirect('/admins/posts')
                         }
                     )
             }
@@ -94,7 +94,7 @@ router.get('/edit/:id', (req, res) => {
         .catch(
             (err) => {
                 req.flash('error_msg', 'This Post doesn\'t exist.')
-                res.redirect('/admin/posts')
+                res.redirect('/admins/posts')
                 console.log(err)
             }
         )
@@ -115,20 +115,20 @@ router.post('/update', (req, res) => {
     let errors = validate(updatePost);
 
     if(errors.length > 0) {
-        res.render('admin/posts/create_update', {errors: errors})
+        res.render('admins/posts/create_update', {errors: errors})
     } else {
 
         Post.findOneAndUpdate(updatePost._id, {$set:updatePost})
             .then(
                 () => {
                     req.flash('success_msg', `Success! Post "${updatePost.title}" updated!`)
-                    res.redirect('/admin/posts')   
+                    res.redirect('/admins/posts')   
                 }
             )
             .catch(
                 (err) => {
                     req.flash('error_msg', `Error! Post "${Post.title}" wasn't created!`)
-                    res.redirect('/admin/posts')
+                    res.redirect('/admins/posts')
                     console.log(err)
                 }
         ) 
@@ -141,13 +141,13 @@ router.post("/delete", (req, res) => {
         .then(
             (Post) => {
                 req.flash('success_msg', `Success! Post "${Post.title}" deleted!`)
-                res.redirect('/admin/posts')
+                res.redirect('/admins/posts')
             }
         )
         .catch(
             (err) => {
                 req.flash('error_msg', `Error! Post "${Post.title}" wasn't deleted!`)
-                res.redirect('/admin/posts')
+                res.redirect('/admins/posts')
                 console.log(err)
             }
         )
@@ -158,10 +158,6 @@ function validate(object) {
 
     if(!object.title || typeof object.title == undefined || object.title == null) {
         errors.push({text: 'Invalid title'})
-    }
-
-    if(object.title.length < 2) {
-        errors.push({text: 'Post title too small'})
     }
 
     if(!object.slug || typeof object.slug == undefined || object.slug == null) {

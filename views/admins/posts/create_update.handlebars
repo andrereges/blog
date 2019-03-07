@@ -2,7 +2,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="{{#if post}}/admin/posts/update{{else}}/admin/posts/add{{/if}}" method="POST">
+        <form action="{{#if post}}/admins/posts/update{{else}}/admins/posts/add{{/if}}" method="POST">
             
             <input type="hidden" id="id" name="id" value="{{#if post}}{{post._id}}{{else}}{{/if}}">
             

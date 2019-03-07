@@ -7,13 +7,13 @@
 </h3>
 <div class="card">
     <div class="card-body">
-        <form action="{{#if category}}/admin/categories/update{{else}}/admin/categories/add{{/if}}" method="category">
+        <form action="{{#if category}}/admins/categories/update{{else}}/admins/categories/add{{/if}}" method="POST">
             <input type="hidden" id="id" name="id" value="{{#if category}}{{category._id}}{{else}}{{/if}}">
-            <label for="title">*Title:</label>
-                <input type="text" id="title" name="title" 
-                    placeholder="Category's title" 
+            <label for="name">*Name:</label>
+                <input type="text" id="name" name="name" 
+                    placeholder="Category's name" 
                     class="form-control"
-                    value="{{#if category}}{{category.title}}{{else}}{{/if}}"
+                    value="{{#if category}}{{category.name}}{{else}}{{/if}}"
                     autofocus required>
 
             <label for="slug">*Slug:</label>
