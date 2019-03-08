@@ -5,3 +5,4 @@ sudo npm install --save
 	mongoose
 	express-session
 	connect-flash
+	bcryptjs

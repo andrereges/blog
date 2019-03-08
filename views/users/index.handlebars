@@ -1,0 +1,33 @@
+<h2>Users List: </h2>
+<hr>
+<div class="text-right">
+    <a href="/users/create">
+        <button class="btn btn-outline-success">New User</button>
+    </a>
+</div>
+{{#each users}}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4>{{name}}</h4>
+            <p><small><b>Email: </b>{{email}}</small></p>
+            <p><small><b>Created at: </b>{{created_at}}</small></p>
+            <p><small><b>Last Update at: </b>{{update_at}}</small></p>
+            <br>
+            <div class="row mt-4 justify-content-center align-items-center">
+                <div class="col-sm-2">
+                    <a href="/users/edit/{{id}}">
+                        <button type="button" class="form-control btn btn-outline-primary">Edit</button>
+                    </a> 
+                </div>
+                <div class="col-sm-2">
+                    <form action="/users/delete" method="POST">
+                        <input type="hidden" name="id" value="{{_id}}">
+                        <button type="submit" class="form-control btn btn-outline-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{{else}}
+    <h4 class="mt-3">No users registered</h4>
+{{/each}}

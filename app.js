@@ -7,13 +7,17 @@
     const admins = require('./routers/admins/home')
     const admins_categories = require('./routers/admins/categories')
     const admins_posts = require('./routers/admins/posts')
+    const users = require('./routers/users')
     const path = require('path')
     const mongoose = require('mongoose')
     const session = require('express-session')
     const flash = require('connect-flash')
+    const bcrypt = require('bcryptjs')
 
+    //require('./models/User')
     require('./models/Post')
     require('./models/Category')
+    //const User = mongoose.model('users')
     const Post = mongoose.model('posts')
     const Category = mongoose.model('categories')
 
@@ -123,6 +127,7 @@
     app.use('/admins', admins)
     app.use('/admins/categories', admins_categories)
     app.use('/admins/posts', admins_posts)
+    app.use('/users', users)
 
 // Others
     const PORT = 8081
